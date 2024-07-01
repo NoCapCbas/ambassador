@@ -2,12 +2,12 @@ version: '3.9'
 services:
   backend: 
     build:
-      context: .
+      context: ./backend
       dockerfile: go.Dockerfile 
     ports:
       - "8000:8000"
     volumes:
-      - .:/app
+      - ./backend:/app
     depends_on:
       - db
 

@@ -13,10 +13,10 @@ COPY . .
 # binary will be $(go env GOPATH)/bin/air
 RUN curl -sSfL https://raw.githubusercontent.com/air-verse/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
 
-# Install Neovim
-RUN apt-get update && \
-    apt-get install -y neovim && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# # Install Neovim
+# RUN apt-get update && \
+#     apt-get install -y neovim && \
+#     apt-get clean && \
+#     rm -rf /var/lib/apt/lists/*
 
 CMD ["air"]

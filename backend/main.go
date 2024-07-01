@@ -2,6 +2,7 @@ package main
 
 import (
   "ambassador/src/database"
+  "ambassador/src/routes"
 
   "github.com/gofiber/fiber/v2"
 )
@@ -13,9 +14,7 @@ func main() {
   // init app
   app := fiber.New()
   // handler
-  app.Get("/", func (c *fiber.Ctx) error {
-      return c.SendString("Hello, Damon this is a test...!")
-  })
+  routes.Setup(app)
   // start server at port
   app.Listen(":8000")
 }
