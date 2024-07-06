@@ -8,6 +8,18 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
+    # develop:
+    #   watch:
+    #     - action: sync
+    #       path: ./backend
+    #       target: /app
+    #       ignore:
+    #         - tmp/
+    #         - .dbdata/
+    #     - action: rebuild
+    #       path: go.mod
+    #     - action: rebuild
+    #       path: go.sum
     depends_on:
       - db
 
