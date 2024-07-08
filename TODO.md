@@ -1,0 +1,2 @@
+- backend/src/database/user.go
+    - CreateUser, UpdateUser, ... to be able to use CreateUser in controllers package
