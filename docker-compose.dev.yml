@@ -3,35 +3,21 @@ services:
   backend: 
     build:
       context: ./backend
-      dockerfile: go.Dockerfile 
+      dockerfile: go.Dockerfile
     ports:
       - "8000:8000"
     volumes:
       - ./backend:/app
-    # develop:
-    #   watch:
-    #     - action: sync
-    #       path: ./backend
-    #       target: /app
-    #       ignore:
-    #         - tmp/
-    #         - .dbdata/
-    #     - action: rebuild
-    #       path: go.mod
-    #     - action: rebuild
-    #       path: go.sum
     depends_on:
       - db
 
   db: 
-    image: mysql:5.7.22
+    image: postgres:latest  # Change the image to PostgreSQL
     restart: always 
     environment: 
-      MYSQL_DATABASE: ambassador
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root 
-      MYSQL_ROOT_PASSWORD: root 
+      POSTGRES_DB: ambassador  
+      POSTGRES_USER: postgres 
+      POSTGRES_PASSWORD: root    
     volumes: 
-      - .dbdata:/var/lib/mysql
-    
+      - .dbdata:/var/lib/postgresql/data  # Mount data volume for persistence
 

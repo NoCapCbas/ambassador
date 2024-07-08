@@ -11,7 +11,7 @@ COPY . .
 
 # Live Hot Reloading using Air (https://github.com/air-verse/air)
 # binary will be $(go env GOPATH)/bin/air
-RUN curl -sSfL https://raw.githubusercontent.com/air-verse/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+# RUN curl -sSfL https://raw.githubusercontent.com/air-verse/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
 
 # # Install Neovim
 # RUN apt-get update && \
@@ -19,4 +19,4 @@ RUN curl -sSfL https://raw.githubusercontent.com/air-verse/air/master/install.sh
 #     apt-get clean && \
 #     rm -rf /var/lib/apt/lists/*
 
-CMD ["air"]
+CMD ["go", "run", "main.go"]
