@@ -20,19 +20,19 @@ const (
   timezone = "UTC"
 )
 
-var DB *sql.DB
+var db *sql.DB
 
 func Connect() {
 	var err error
 
 	// Connect to PostgreSQL database
    dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s", host, user, password, dbname, port, sslmode, timezone)
-	DB, err = sql.Open("postgres", dsn)
+	db, err = sql.Open("postgres", dsn)
 	if err != nil {
     log.Fatalf("Error connecting to database: %v\n", err)
 	}
 
-  err = DB.Ping() 
+  err = db.Ping() 
   if err != nil {
     log.Fatalf("Error pinging database: %v\n", err)
   }
@@ -40,7 +40,7 @@ func Connect() {
 
 func AutoMigrate() {
 	// Auto migrate models
-	_, err := DB.Exec(`
+	_, err := db.Exec(`
 
   CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
@@ -57,7 +57,7 @@ func AutoMigrate() {
 }
 
 func CloseDB() {
-  err := DB.Close()
+  err := db.Close()
   if err != nil {
     log.Fatalf("Error closing database connection: %v\n", err)
   }
