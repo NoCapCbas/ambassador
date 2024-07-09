@@ -9,7 +9,7 @@ import (
 // CreateUser
 func CreateUser(user *models.User) error {
   query := `
-    INSERT INTO user (first_name, last_name, email, password, is_ambassador)
+    INSERT INTO users (first_name, last_name, email, password, is_ambassador)
     VALUES ($1, $2, $3, $4, $5)
     RETURNING id
   `

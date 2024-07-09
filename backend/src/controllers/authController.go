@@ -60,7 +60,7 @@ func Login(c *fiber.Ctx) error {
   if err != nil {
     log.Printf("Failed to authenticate user: %v\n", err)
     c.Status(fiber.StatusBadRequest)
-    return fmt.Errorf("Error Authenticating User: %v", err)
+    return fmt.Errorf("Error Authenticating User", err)
   }
 
   return c.JSON(user)
