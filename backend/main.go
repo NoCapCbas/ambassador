@@ -7,6 +7,7 @@ import (
   "ambassador/src/routes"
 
   "github.com/gofiber/fiber/v2"
+  "github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
@@ -16,6 +17,11 @@ func main() {
   
   // init app
   app := fiber.New()
+  // Allow cors and credentials
+  app.Use(cors.New(cors.Config{
+    AllowOrigins: "http://localhost:8001",
+    AllowCredentials: true,
+  }))
   // set up routes
   routes.Setup(app)
   // example root route

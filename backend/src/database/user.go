@@ -11,10 +11,8 @@ func CreateUser(user *models.User) error {
   query := `
     INSERT INTO users (first_name, last_name, email, password, is_ambassador)
     VALUES ($1, $2, $3, $4, $5)
-    RETURNING id
   `
-
-  err := db.QueryRow(query, user.FirstName, user.LastName, user.Email, user.Password, user.IsAmbassador)
+  _, err := db.Exec(query, user.FirstName, user.LastName, user.Email, user.Password, user.IsAmbassador)
   if err != nil {
     return fmt.Errorf("CreateUser: %v", err)
   }

@@ -2,11 +2,13 @@ package controllers
 
 import (
   "github.com/gofiber/fiber/v2"
+  "github.com/dgrijalva/jwt-go"
   "ambassador/src/models"
   "ambassador/src/database"
-  "ambassador/src/utils"
+  "strconv"
   "log"
   "fmt"
+  "time"
 )
 
 func Register(c *fiber.Ctx) error {
@@ -23,15 +25,15 @@ func Register(c *fiber.Ctx) error {
     })
   }
 
-  password, _ := utils.HashPassword(data["password"])
-
   user := models.User{
     FirstName: data["first_name"],
     LastName: data["last_name"],
     Email: data["email"],
-    Password: password,
     IsAmbassador: false,
   }
+
+  user.SetPassword(data["password"])
+
 
   // insert user into database
   err := database.CreateUser(&user)
@@ -52,7 +54,10 @@ func Login(c *fiber.Ctx) error {
   var err error
 
   if err = c.BodyParser(&data); err != nil {
-   return err
+    c.Status(fiber.StatusBadRequest)
+    return c.JSON(fiber.Map{
+      "message":"Cannot parse JSON",
+    }) 
   }
   
   var user *models.User
@@ -60,8 +65,33 @@ func Login(c *fiber.Ctx) error {
   if err != nil {
     log.Printf("Failed to authenticate user: %v\n", err)
     c.Status(fiber.StatusBadRequest)
-    return fmt.Errorf("Error Authenticating User", err)
+    return fmt.Errorf("Invalid email or password", err)
   }
 
-  return c.JSON(user)
+  payload := jwt.StandardClaims{
+    Subject: strconv.Itoa(int(user.ID)),
+    ExpiresAt: time.Now().Add(time.Hour*24).Unix(),
+  }
+
+  token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, payload).SignedString([]byte("secret"))
+  if err != nil {
+    log.Printf("Failed to generate JWT token: %v\n", err)
+    c.Status(fiber.StatusBadRequest)
+    return c.JSON(fiber.Map{
+      "message":"Invalid Token Credentials",
+    })
+  }
+
+  cookie := fiber.Cookie{
+    Name: "jwt",
+    Value: token,
+    Expires: time.Now().Add(time.Hour*24),
+    HTTPOnly: true,
+  }
+  
+  c.Cookie(&cookie)
+
+  return c.JSON(fiber.Map{
+    "message":"success",
+  })
 }
